@@ -1,37 +1,40 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const connectDB = require("./db");
-const bodyParser = require("body-parser");
+const connectDB = require('./db');
+const bodyParser = require('body-parser');
 
-// Models
-const Worker = require("./models/Worker");
-
-app.use(bodyParser.json()); // to support JSON-encoded bodies
+const port = 5050;
 
 connectDB();
+
+// Models
+const Worker = require('./models/Worker');
+const Items = require('./models/Items');
+
+app.use(bodyParser.json()); // to support JSON-encoded bodies
 
 // Routes
 
 // @route   GET /workers
 // @desc    Get all workers
-app.get("/workers", async (req, res) => {
+app.get('/workers', async (req, res) => {
   try {
     const workers = await Worker.find().sort({ date: 1 });
     res.json(workers);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 // @route   POST /worker
 // @desc    Add a new worker to the schedule
-app.post("/worker", async (req, res) => {
+app.post('/worker', async (req, res) => {
   const { name, date } = req.body;
 
   const worker = new Worker({
     name,
-    date
+    date,
   });
 
   try {
@@ -43,15 +46,52 @@ app.post("/worker", async (req, res) => {
 
 // @route   DELETE /worker
 // @desc    Remove a new worker from the schedule
-app.delete("/worker/:id", async (req, res) => {
+app.delete('/worker/:id', async (req, res) => {
   try {
     await Worker.deleteOne({ _id: req.params.id });
   } catch (error) {
-    console.error("Error / ", error);
+    console.error('Error / ', error);
+  }
+});
+
+// @route   GET /items
+// @desc    Get all items
+app.get('/items', async (req, res) => {
+  try {
+    const items = await Items.find();
+    res.json(items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server_Error');
+  }
+});
+
+// @route   POST /item
+// @desc    Add a new item to the fridge
+app.post('/item', async (req, res) => {
+  const { name } = req.body;
+  const item = new Items({
+    name,
+  });
+
+  try {
+    await item.save();
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// @route   DELETE /item
+// @desc    Remove an item from the fridge
+app.delete('/item/:id', async (req, res) => {
+  try {
+    await Items.deleteOne({ _id: req.params.id });
+  } catch (error) {
+    console.error('Error / ', error);
   }
 });
 
 //
-app.listen(5000, () => {
-  console.log("Example app listening on port 3000!");
+app.listen(port, () => {
+  console.log('Running!');
 });
