@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 //TODO
 const itemsSchema = new mongoose.Schema({
-  items: []
+  name: {
+    type: String,
+  },
 });
-const Items = mongoose.model("Items", itemsSchema);
+const Items = mongoose.model('Items', itemsSchema);
 
 module.exports = Items;
