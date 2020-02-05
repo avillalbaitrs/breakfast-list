@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const connectDB = require('./db');
 const bodyParser = require('body-parser');
-
+const path = require('path');
 const port = 5050;
 
 connectDB();
@@ -90,6 +90,13 @@ app.delete('/item/:id', async (req, res) => {
     console.error('Error / ', error);
   }
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 //
 app.listen(port, () => {
