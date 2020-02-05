@@ -77,7 +77,9 @@ export default function Schedule() {
   // Fetch workers from database
   const getWorkers = async () => {
     try {
-      const workersFetched = await axios.get(`/workers`);
+      const workersFetched = await axios.get(
+        `https://fast-reaches-80611.herokuapp.com/workers`,
+      );
       if (workersFetched.data.length > 0 || workersFetched.data.length === 0) {
         setLoading(false);
       }

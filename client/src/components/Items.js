@@ -65,7 +65,9 @@ function Items() {
   // Fetch items from database
   const getItems = async () => {
     try {
-      const itemsFetched = await axios.get(`/items`);
+      const itemsFetched = await axios.get(
+        `https://fast-reaches-80611.herokuapp.com/items`,
+      );
       //   if (itemsFetched.data.length > 0 || itemsFetched.data.length === 0) {
       //     setLoading(false);
       //   }
